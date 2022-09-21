@@ -39,10 +39,29 @@ function PROCESS_UPSTREAM {
 
   echo "Upstream '$NAME': $UPSTREAM"
 
+  ORIGIN=$(git remote show origin)
 
+  if [[ "$ORIGIN" == *"$UPSTREAM"* ]]; then
+
+    echo "WARNING: Remote '$NAME' already added"
+
+  else
+
+      if git remote add "$NAME" "$UPSTREAM"; then
+
+        echo "Remote '$NAME' added"
+
+      else
+
+        echo "ERROR: Remote '$NAME' not added"
+        exit 1
+      fi
+  fi
 }
 
-for i in "$DIR_UPSTREAMS"/*.sh; do
+cd "$DIR_UPSTREAMS" && echo "Processing upstreams from: $DIR_UPSTREAMS"
+
+for i in *.sh; do
 
   UNSET_UPSTREAM_VARIABLES
 
