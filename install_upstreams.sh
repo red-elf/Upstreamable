@@ -43,17 +43,27 @@ function PROCESS_UPSTREAM {
 
   if [[ "$ORIGIN" == *"Push  URL: $UPSTREAM"* ]]; then
 
-    echo "WARNING: Upstream '$NAME' already added"
+    echo "WARNING: Upstream remote '$NAME' already added"
 
   else
 
       if git remote add "$NAME" "$UPSTREAM"; then
 
-        echo "Upstream '$NAME' added"
+        echo "Upstream remote '$NAME' added"
 
         if git remote set-url --add --push origin "$UPSTREAM"; then
 
           echo "Upstream push '$NAME' added"
+
+          if git remote add upstream "$UPSTREAM"; then
+
+            echo "Upstream '$NAME' added"
+
+          else
+
+            echo "ERROR: Upstream '$NAME' not added"
+            exit 1
+          fi
 
         else
 
@@ -63,7 +73,7 @@ function PROCESS_UPSTREAM {
 
       else
 
-        echo "ERROR: Upstream '$NAME' not added"
+        echo "ERROR: Upstream remote '$NAME' not added"
         exit 1
       fi
   fi
