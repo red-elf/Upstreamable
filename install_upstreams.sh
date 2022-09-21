@@ -20,6 +20,19 @@ function UNSET_UPSTREAM_VARIABLES {
   fi
 }
 
+function PROCESS_UPSTREAM {
+
+  if [ -z "$1" ]; then
+
+    echo "ERROR: No upstream provided"
+    exit 1
+  fi
+
+  UPSTREAM="$1"
+  echo "Upstream: $UPSTREAM"
+
+}
+
 for i in "$DIR_UPSTREAMS"/*.sh; do
 
   UNSET_UPSTREAM_VARIABLES
@@ -31,7 +44,7 @@ for i in "$DIR_UPSTREAMS"/*.sh; do
     # shellcheck disable=SC1090
     . "$i"
 
-    echo "Upstream: $UPSTREAMABLE_REPOSITORY"
+    PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY"
 
   else
 
