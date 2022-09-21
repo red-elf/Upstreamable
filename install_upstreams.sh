@@ -24,12 +24,21 @@ function PROCESS_UPSTREAM {
 
   if [ -z "$1" ]; then
 
-    echo "ERROR: No upstream provided"
+    echo "ERROR: No upstream repository provided"
+    exit 1
+  fi
+
+  if [ -z "$2" ]; then
+
+    echo "ERROR: No upstream name provided"
     exit 1
   fi
 
   UPSTREAM="$1"
-  echo "Upstream: $UPSTREAM"
+  NAME="$2"
+
+  echo "Upstream '$NAME': $UPSTREAM"
+
 
 }
 
@@ -44,7 +53,10 @@ for i in "$DIR_UPSTREAMS"/*.sh; do
     # shellcheck disable=SC1090
     . "$i"
 
-    PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY"
+    FILE_NAME=$(basename -- "$i")
+    FILE_NAME="${FILE_NAME%.*}"
+    FILE_NAME=$(echo "$FILE_NAME" | tr '[:upper:]' '[:lower:]')
+    PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY" "$FILE_NAME"
 
   else
 
