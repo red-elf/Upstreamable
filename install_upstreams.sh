@@ -87,10 +87,8 @@ for i in *.sh; do
 
   if test -e "$i"; then
 
-    echo "Processing upstream file: $i"
-
     # shellcheck disable=SC1090
-    . "$i"
+    echo "Processing upstream file: $i ($(pwd))" && . "$i"
 
     FILE_NAME=$(basename -- "$i")
     FILE_NAME="${FILE_NAME%.*}"
