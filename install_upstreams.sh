@@ -93,11 +93,20 @@ for i in *.sh; do
     FILE_NAME=$(basename -- "$i")
     FILE_NAME="${FILE_NAME%.*}"
     FILE_NAME=$(echo "$FILE_NAME" | tr '[:upper:]' '[:lower:]')
-    PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY" "$FILE_NAME"
+
+    if test -e "$FILE_NAME"; then
+
+      PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY" "$FILE_NAME"
+
+    else
+
+      echo "ERROR: '$FILE_NAME' not found at: '$(pwd)' (1)"
+      exit 1
+    fi
 
   else
 
-    echo "ERROR: '$i' not found at: '$(pwd)'"
+    echo "ERROR: '$i' not found at: '$(pwd)' (2)"
     exit 1
   fi
 done
