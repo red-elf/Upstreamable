@@ -61,14 +61,12 @@ function PROCESS_UPSTREAM {
 
           else
 
-            echo "ERROR: Upstream '$NAME' not added"
-            exit 1
+            echo "WARNING: Upstream '$NAME' not added"
           fi
 
         else
 
-          echo "ERROR: Upstream push '$NAME' not added"
-          exit 1
+          echo "WARNING: Upstream push '$NAME' not added"
         fi
 
       else
