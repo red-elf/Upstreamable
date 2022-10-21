@@ -87,22 +87,15 @@ for i in *.sh; do
 
   if test -e "$i"; then
 
+    UPSTREAM_FILE="$(pwd)"/"$i"
     # shellcheck disable=SC1090
-    echo "Processing upstream file: $i ($(pwd))" && . "$i"
+    echo "Processing upstream file: $UPSTREAM_FILE" && . "$UPSTREAM_FILE"
 
     FILE_NAME=$(basename -- "$i")
     FILE_NAME="${FILE_NAME%.*}"
     FILE_NAME=$(echo "$FILE_NAME" | tr '[:upper:]' '[:lower:]')
 
-    if test -e "$FILE_NAME"; then
-
-      PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY" "$FILE_NAME"
-
-    else
-
-      echo "ERROR: '$FILE_NAME' not found at: '$(pwd)' (1)"
-      exit 1
-    fi
+    PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY" "$FILE_NAME"
 
   else
 
