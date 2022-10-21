@@ -89,7 +89,7 @@ for i in *.sh; do
 
     UPSTREAM_FILE="$(pwd)"/"$i"
     # shellcheck disable=SC1090
-    echo "Processing upstream file: $UPSTREAM_FILE" && . "$UPSTREAM_FILE"
+    echo "Processing the upstream file: $UPSTREAM_FILE" && . "$UPSTREAM_FILE"
 
     FILE_NAME=$(basename -- "$i")
     FILE_NAME="${FILE_NAME%.*}"
