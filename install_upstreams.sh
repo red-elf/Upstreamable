@@ -61,14 +61,12 @@ function PROCESS_UPSTREAM {
 
           else
 
-            echo "ERROR: Upstream '$NAME' not added"
-            exit 1
+            echo "WARNING: Upstream '$NAME' not added"
           fi
 
         else
 
-          echo "ERROR: Upstream push '$NAME' not added"
-          exit 1
+          echo "WARNING: Upstream push '$NAME' not added"
         fi
 
       else
@@ -87,19 +85,19 @@ for i in *.sh; do
 
   if test -e "$i"; then
 
-    echo "Processing upstream file: $i"
-
+    UPSTREAM_FILE="$(pwd)"/"$i"
     # shellcheck disable=SC1090
-    . "$i"
+    echo "Processing the upstream file: $UPSTREAM_FILE" && . "$UPSTREAM_FILE"
 
     FILE_NAME=$(basename -- "$i")
     FILE_NAME="${FILE_NAME%.*}"
     FILE_NAME=$(echo "$FILE_NAME" | tr '[:upper:]' '[:lower:]')
+
     PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY" "$FILE_NAME"
 
   else
 
-    echo "ERROR: '$i' not found at: '$(pwd)'"
+    echo "ERROR: '$i' not found at: '$(pwd)' (2)"
     exit 1
   fi
 done
