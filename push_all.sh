@@ -67,3 +67,13 @@ for i in *.sh; do
     exit 1
   fi
 done
+
+if git push --tags; then
+
+  echo "All tags have been pushed with success"
+
+else
+
+  echo "ERROR: Tags have failed to be pushed pushed to upstream"
+  exit 1
+fi
