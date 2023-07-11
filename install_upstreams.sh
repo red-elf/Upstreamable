@@ -9,7 +9,7 @@ fi
 
 echo "Upstreams sources path: '$DIR_UPSTREAMS'"
 
-function UNSET_UPSTREAM_VARIABLES {
+UNSET_UPSTREAM_VARIABLES() {
 
   unset UPSTREAMABLE_REPOSITORY
 
@@ -20,7 +20,7 @@ function UNSET_UPSTREAM_VARIABLES {
   fi
 }
 
-function PROCESS_UPSTREAM {
+PROCESS_UPSTREAM() {
 
   if [ -z "$1" ]; then
 
