@@ -41,7 +41,7 @@ PROCESS_UPSTREAM() {
 
   ORIGIN=$(git remote show origin)
 
-  if [[ "$ORIGIN" == *"Push  URL: $UPSTREAM"* ]]; then
+  if [ "$ORIGIN" = *"Push  URL: $UPSTREAM"* ]; then
 
     echo "WARNING: Upstream remote '$NAME' already added"
 
