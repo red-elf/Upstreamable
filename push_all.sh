@@ -36,7 +36,7 @@ SCRIPT_STRINGS="$SUBMODULES_HOME/Software-Toolkit/Utils/strings.sh"
 
 if test -e "$SCRIPT_STRINGS"; then
 
-    # shellcheck disable=SC1090
+  # shellcheck disable=SC1090
   . "$SCRIPT_STRINGS"
 
 else
@@ -52,7 +52,7 @@ if [ -n "$1" ]; then
 
   DIR_UPSTREAMS="$1"
 
-  if ! echo "$DIR_UPSTREAMS" | grep "/$UPSTREAMS"; then
+  if ! echo "$DIR_UPSTREAMS" | grep "$UPSTREAMS"; then
 
       DIR_UPSTREAMS="$DIR_UPSTREAMS/$UPSTREAMS"
   fi
