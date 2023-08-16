@@ -1,79 +1,79 @@
 #!/bin/bash
 
-DIR_UPSTREAMS="Upstreams"
+DIR_HOME=$(eval echo ~"$USER")
+FILE_ZSH_RC="$DIR_HOME/.zshrc"
+FILE_BASH_RC="$DIR_HOME/.bashrc"
+
+FILE_RC=""
+    
+if test -e "$FILE_ZSH_RC"; then
+
+  FILE_RC="$FILE_ZSH_RC"
+
+else
+
+    if test -e "$FILE_BASH_RC"; then
+
+      FILE_RC="$FILE_BASH_RC"
+
+    else
+
+      echo "ERROR: No '$FILE_ZSH_RC' or '$FILE_BASH_RC' found on the system"
+      exit 1
+    fi
+fi
+
+# shellcheck disable=SC1090
+. "$FILE_RC"
+
+if [ -z "$SUBMODULES_HOME" ]; then
+
+  echo "ERROR: The SUBMODULES_HOME is not defined"
+  exit 1
+fi
+
+SCRIPT_STRINGS="$SUBMODULES_HOME/Software-Toolkit/Utils/strings.sh"
+
+if test -e "$SCRIPT_STRINGS"; then
+
+    # shellcheck disable=SC1090
+  . "$SCRIPT_STRINGS"
+
+else
+
+  echo "ERROR: Script not found '$SCRIPT_STRINGS'"
+  exit 1
+fi
+
+UPSTREAMS="Upstreams"
+DIR_UPSTREAMS="$UPSTREAMS"
 
 if [ -n "$1" ]; then
 
   DIR_UPSTREAMS="$1"
+
+  if ! echo "$DIR_UPSTREAMS" | grep "/$UPSTREAMS"; then
+
+      DIR_UPSTREAMS="$DIR_UPSTREAMS/$UPSTREAMS"
+  fi
 fi
 
-echo "Upstreams sources path: '$DIR_UPSTREAMS'"
+SCRIPT_PUSH_ALL="$SUBMODULES_HOME/Software-Toolkit/Utils/Git/push_all.sh"
 
-UNSET_UPSTREAM_VARIABLES() {
+if test -e "$SCRIPT_PUSH_ALL"; then
 
-  unset UPSTREAMABLE_REPOSITORY
+  if sh "$SCRIPT_PUSH_ALL" "$DIR_UPSTREAMS"; then
 
-  if [ -n "$UPSTREAMABLE_REPOSITORY" ]; then
-
-    echo "ERROR: The UPSTREAMABLE_REPOSITORY environment variable is still set"
-    exit 1
-  fi
-}
-
-PROCESS_UPSTREAM() {
-
-  if [ -z "$1" ]; then
-
-    echo "ERROR: No upstream repository provided"
-    exit 1
-  fi
-
-  if [ -z "$2" ]; then
-
-    echo "ERROR: No upstream name provided"
-    exit 1
-  fi
-
-  UPSTREAM="$1"
-  NAME="$2"
-
-  if echo "Upstream '$NAME': $UPSTREAM" && git push "$NAME"; then
-
-    git fetch && git pull
-  fi
-}
-
-cd "$DIR_UPSTREAMS" && echo "Processing upstreams from: $DIR_UPSTREAMS"
-
-for i in *.sh; do
-
-  UNSET_UPSTREAM_VARIABLES
-
-  if test -e "$i"; then
-
-    UPSTREAM_FILE="$(pwd)"/"$i"
-    # shellcheck disable=SC1090
-    echo "Processing the upstream file: $UPSTREAM_FILE" && . "$UPSTREAM_FILE"
-
-    FILE_NAME=$(basename -- "$i")
-    FILE_NAME="${FILE_NAME%.*}"
-    FILE_NAME=$(echo "$FILE_NAME" | tr '[:upper:]' '[:lower:]')
-
-    PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY" "$FILE_NAME"
+    echo "Push all success"
 
   else
 
-    echo "ERROR: '$i' not found at: '$(pwd)' (2)"
+    echo "ERROR: Push all failure"
     exit 1
   fi
-done
-
-if git push --tags; then
-
-  echo "All tags have been pushed with success"
 
 else
 
-  echo "ERROR: Tags have failed to be pushed pushed to upstream"
+  echo "ERROR: Script not found '$SCRIPT_PUSH_ALL'"
   exit 1
 fi
