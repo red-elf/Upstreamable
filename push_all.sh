@@ -89,5 +89,5 @@ if test -e "$HOOK_SCRIPT"; then
 
   echo "Executing the hook script: $HOOK_SCRIPT"
 
-  sh "$HOOK_SCRIPT"
+  sh "$HOOK_SCRIPT" "$DIR_UPSTREAMS"
 fi
