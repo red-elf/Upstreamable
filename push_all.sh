@@ -58,6 +58,13 @@ if [ -n "$1" ]; then
   fi
 fi
 
+if [ -n "$2" ]; then
+
+  HOOK_SCRIPT="$2"
+
+  echo "Hook script set to: $HOOK_SCRIPT"
+fi
+
 SCRIPT_PUSH_ALL="$SUBMODULES_HOME/Software-Toolkit/Utils/Git/push_all.sh"
 
 if test -e "$SCRIPT_PUSH_ALL"; then
@@ -76,4 +83,11 @@ else
 
   echo "ERROR: Script not found '$SCRIPT_PUSH_ALL'"
   exit 1
+fi
+
+if test -e "$HOOK_SCRIPT"; then
+
+  echo "Executing the hook script: $HOOK_SCRIPT"
+
+  sh "$HOOK_SCRIPT"
 fi
