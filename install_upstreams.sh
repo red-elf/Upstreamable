@@ -7,97 +7,104 @@ if [ -n "$1" ]; then
   DIR_UPSTREAMS="$1"
 fi
 
-echo "Upstreams sources path: '$DIR_UPSTREAMS'"
+if test -e "$DIR_UPSTREAMS"; then
 
-UNSET_UPSTREAM_VARIABLES() {
+  echo "Upstreams sources path: '$DIR_UPSTREAMS'"
 
-  unset UPSTREAMABLE_REPOSITORY
+  UNSET_UPSTREAM_VARIABLES() {
 
-  if [ -n "$UPSTREAMABLE_REPOSITORY" ]; then
+    unset UPSTREAMABLE_REPOSITORY
 
-    echo "ERROR: The UPSTREAMABLE_REPOSITORY environment variable is still set"
-    exit 1
-  fi
-}
+    if [ -n "$UPSTREAMABLE_REPOSITORY" ]; then
 
-PROCESS_UPSTREAM() {
+      echo "ERROR: The UPSTREAMABLE_REPOSITORY environment variable is still set"
+      exit 1
+    fi
+  }
 
-  if [ -z "$1" ]; then
+  PROCESS_UPSTREAM() {
 
-    echo "ERROR: No upstream repository provided"
-    exit 1
-  fi
+    if [ -z "$1" ]; then
 
-  if [ -z "$2" ]; then
+      echo "ERROR: No upstream repository provided"
+      exit 1
+    fi
 
-    echo "ERROR: No upstream name provided"
-    exit 1
-  fi
+    if [ -z "$2" ]; then
 
-  UPSTREAM="$1"
-  NAME="$2"
+      echo "ERROR: No upstream name provided"
+      exit 1
+    fi
 
-  echo "Upstream '$NAME': $UPSTREAM"
+    UPSTREAM="$1"
+    NAME="$2"
 
-  ORIGIN=$(git remote show origin)
+    echo "Upstream '$NAME': $UPSTREAM"
 
-  if [ "$ORIGIN" = *"Push  URL: $UPSTREAM"* ]; then
+    ORIGIN=$(git remote show origin)
 
-    echo "WARNING: Upstream remote '$NAME' already added"
+    if [ "$ORIGIN" = *"Push  URL: $UPSTREAM"* ]; then
 
-  else
+      echo "WARNING: Upstream remote '$NAME' already added"
 
-      if git remote add "$NAME" "$UPSTREAM"; then
+    else
 
-        echo "Upstream remote '$NAME' added"
+        if git remote add "$NAME" "$UPSTREAM"; then
 
-        if git remote set-url --add --push origin "$UPSTREAM"; then
+          echo "Upstream remote '$NAME' added"
 
-          echo "Upstream push '$NAME' added"
+          if git remote set-url --add --push origin "$UPSTREAM"; then
 
-          if git remote add upstream "$UPSTREAM"; then
+            echo "Upstream push '$NAME' added"
 
-            echo "Upstream '$NAME' added"
+            if git remote add upstream "$UPSTREAM"; then
+
+              echo "Upstream '$NAME' added"
+
+            else
+
+              echo "WARNING: Upstream '$NAME' not added"
+            fi
 
           else
 
-            echo "WARNING: Upstream '$NAME' not added"
+            echo "WARNING: Upstream push '$NAME' not added"
           fi
 
         else
 
-          echo "WARNING: Upstream push '$NAME' not added"
+          echo "ERROR: Upstream remote '$NAME' not added"
+          exit 1
         fi
+    fi
+  }
 
-      else
+  cd "$DIR_UPSTREAMS" && echo "Processing upstreams from: $DIR_UPSTREAMS"
 
-        echo "ERROR: Upstream remote '$NAME' not added"
-        exit 1
-      fi
-  fi
-}
+  for i in *.sh; do
 
-cd "$DIR_UPSTREAMS" && echo "Processing upstreams from: $DIR_UPSTREAMS"
+    UNSET_UPSTREAM_VARIABLES
 
-for i in *.sh; do
+    if test -e "$i"; then
 
-  UNSET_UPSTREAM_VARIABLES
+      UPSTREAM_FILE="$(pwd)"/"$i"
+      # shellcheck disable=SC1090
+      echo "Processing the upstream file: $UPSTREAM_FILE" && . "$UPSTREAM_FILE"
 
-  if test -e "$i"; then
+      FILE_NAME=$(basename -- "$i")
+      FILE_NAME="${FILE_NAME%.*}"
+      FILE_NAME=$(echo "$FILE_NAME" | tr '[:upper:]' '[:lower:]')
 
-    UPSTREAM_FILE="$(pwd)"/"$i"
-    # shellcheck disable=SC1090
-    echo "Processing the upstream file: $UPSTREAM_FILE" && . "$UPSTREAM_FILE"
+      PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY" "$FILE_NAME"
 
-    FILE_NAME=$(basename -- "$i")
-    FILE_NAME="${FILE_NAME%.*}"
-    FILE_NAME=$(echo "$FILE_NAME" | tr '[:upper:]' '[:lower:]')
+    else
 
-    PROCESS_UPSTREAM "$UPSTREAMABLE_REPOSITORY" "$FILE_NAME"
+      echo "ERROR: '$i' not found at: '$(pwd)' (2)"
+      exit 1
+    fi
+  done
 
-  else
+else
 
-    echo "ERROR: '$i' not found at: '$(pwd)' (2)"
-    exit 1
-  fi
-done
+  echo "WARNING: Upstreams sources path does notexist '$DIR_UPSTREAMS'"
+fi
