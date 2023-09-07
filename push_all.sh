@@ -71,7 +71,7 @@ if test -e "$SCRIPT_PUSH_ALL"; then
 
   if sh "$SCRIPT_PUSH_ALL" "$DIR_UPSTREAMS"; then
 
-    echo "Push all success"
+    echo "Push all finished"
 
   else
 
