@@ -106,5 +106,5 @@ if test -e "$DIR_UPSTREAMS"; then
 
 else
 
-  echo "WARNING: Upstreams sources path does notexist '$DIR_UPSTREAMS'"
+  echo "WARNING: '$DIR_UPSTREAMS' sources path not found"
 fi
