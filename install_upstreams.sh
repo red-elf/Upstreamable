@@ -49,33 +49,26 @@ if test -e "$DIR_UPSTREAMS"; then
 
     else
 
-        if git remote add "$NAME" "$UPSTREAM"; then
+      git remote add "$NAME" "$UPSTREAM" && \
+        echo "Upstream remote '$NAME' added"
 
-          echo "Upstream remote '$NAME' added"
+      if git remote set-url --add --push origin "$UPSTREAM"; then
 
-          if git remote set-url --add --push origin "$UPSTREAM"; then
+        echo "Upstream push '$NAME' added"
 
-            echo "Upstream push '$NAME' added"
+        if git remote add upstream "$UPSTREAM"; then
 
-            if git remote add upstream "$UPSTREAM"; then
-
-              echo "Upstream '$NAME' added"
-
-            else
-
-              echo "WARNING: Upstream '$NAME' not added"
-            fi
-
-          else
-
-            echo "WARNING: Upstream push '$NAME' not added"
-          fi
+          echo "Upstream '$NAME' added"
 
         else
 
-          echo "ERROR: Upstream remote '$NAME' not added"
-          exit 1
+          echo "WARNING: Upstream '$NAME' not added"
         fi
+
+      else
+
+        echo "WARNING: Upstream push '$NAME' not added"
+      fi
     fi
   }
 
