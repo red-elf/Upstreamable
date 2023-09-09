@@ -81,6 +81,7 @@ if test -e "$DIR_UPSTREAMS"; then
     if test -e "$i"; then
 
       UPSTREAM_FILE="$(pwd)"/"$i"
+      
       # shellcheck disable=SC1090
       echo "Processing the upstream file: $UPSTREAM_FILE" && . "$UPSTREAM_FILE"
 
