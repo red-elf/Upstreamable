@@ -43,6 +43,8 @@ if test -e "$DIR_UPSTREAMS"; then
 
     ORIGIN=$(git remote show origin)
 
+    # FIXME: Can't match globs
+    #
     if [ "$ORIGIN" = *"Push  URL: $UPSTREAM"* ]; then
 
       echo "WARNING: Upstream remote '$NAME' already added"
@@ -93,8 +95,8 @@ if test -e "$DIR_UPSTREAMS"; then
 
     else
 
-      echo "ERROR: '$i' not found at: '$(pwd)' (2)"
-      exit 1
+      echo "WARNING: Upstreams not found at '$DIR_UPSTREAMS'"
+      exit 0
     fi
   done
 
