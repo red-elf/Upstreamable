@@ -109,18 +109,19 @@ if test -e "$DIR_UPSTREAMS"; then
 
     HERE=$(pwd)
     PARENT=$(dirname "$HERE")
+    GIT_FILE="$PARENT/.git"
 
-    GIT_TYPE=$(file "$PARENT/.git")
+    GIT_TYPE=$(file )
 
     if echo "$GIT_TYPE" | grep ".git: directory"; then
 
-      GIT_DIR="$PARENT/.git"
+      GIT_DIR="$GIT_FILE"
 
     else
 
       if echo "$GIT_TYPE" | grep ".git: ASCII text"; then
 
-        GIT_CONTENT=$(cat .git)
+        GIT_CONTENT=$(cat "$GIT_FILE")
 
         # TODO: Obtain the directory path, set and enter.
 
