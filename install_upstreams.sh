@@ -61,15 +61,6 @@ if test -e "$DIR_UPSTREAMS"; then
     echo "Upstream '$NAME': $UPSTREAM"
 
     # TODO:
-    #
-    # - Upstreams installation to check if already installed, remove all upstream definition duplicates if found
-    #
-    # Tech notes:
-    #
-    # file git
-    #   Root:       .git: directory
-    #   Submodule:  .git: ASCII text
-    #
     # cat .git
     #   gitdir: ../../.git/modules/_Submodules/Software-Toolkit
     #
@@ -115,6 +106,34 @@ if test -e "$DIR_UPSTREAMS"; then
     #   rebase = false
     # 
     # ^^^ Remove all duplicates, for new installations check of the existing strings existence!   
+
+    HERE=$(pwd)
+    GIT_TYPE=$(file .git)
+
+    if echo "$GIT_TYPE" | grep ".git: directory"; then
+
+      GIT_DIR="$HERE/.git"
+
+    else
+
+      if echo "$GIT_TYPE" | grep ".git: ASCII text"; then
+
+        GIT_CONTENT=$(cat .git)
+
+        # TODO: Obtain the directory path, set and enter.
+
+      else
+
+        echo "ERROR: Unsupported .git type '$GIT_TYPE'"
+        exit 1
+      fi
+    fi
+
+    if ! cd "$HERE"; then
+
+      echo "ERROR: Could not go back into '$HERE'"
+      exit 1
+    fi
 
     ORIGIN=$(git remote show origin)
 
