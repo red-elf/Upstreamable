@@ -60,6 +60,37 @@ if test -e "$DIR_UPSTREAMS"; then
 
     echo "Upstream '$NAME': $UPSTREAM"
 
+    HERE=$(pwd)
+    PARENT=$(dirname "$HERE")
+    GIT_FILE="$PARENT/.git"
+
+    GIT_TYPE=$(file "$GIT_FILE")
+
+    if echo "$GIT_TYPE" | grep ".git: directory"; then
+
+      GIT_DIR="$GIT_FILE"
+
+    else
+
+      if echo "$GIT_TYPE" | grep ".git: ASCII text"; then
+
+        PREFIX="gitdir:"
+        GIT_CONTENT=$(cat "$GIT_FILE")
+
+        if check_contains "$GIT_CONTENT" "$PREFIX"; then
+
+            GIT_DIR=$(echo "$GIT_CONTENT" | grep -o -P "(?<=$PREFIX).*(?=)")
+        fi
+        
+        echo "Git dir found at: '$GIT_DIR'"
+
+      else
+
+        echo "ERROR: Unsupported .git type '$GIT_TYPE'"
+        exit 1
+      fi
+    fi
+
     # TODO:
     #
     # cd ../../.git/modules/_Submodules/Software-Toolkit
@@ -104,34 +135,6 @@ if test -e "$DIR_UPSTREAMS"; then
     #   rebase = false
     # 
     # ^^^ Remove all duplicates, for new installations check of the existing strings existence!   
-
-    HERE=$(pwd)
-    PARENT=$(dirname "$HERE")
-    GIT_FILE="$PARENT/.git"
-
-    GIT_TYPE=$(file "$GIT_FILE")
-
-    if echo "$GIT_TYPE" | grep ".git: directory"; then
-
-      GIT_DIR="$GIT_FILE"
-
-    else
-
-      if echo "$GIT_TYPE" | grep ".git: ASCII text"; then
-
-        GIT_CONTENT=$(cat "$GIT_FILE")
-        
-        # TODO: Obtain the directory path, set and enter.
-        #
-        #   gitdir: ../../.git/modules/_Submodules/Software-Toolkit
-        #
-
-      else
-
-        echo "ERROR: Unsupported .git type '$GIT_TYPE'"
-        exit 1
-      fi
-    fi
 
     if ! cd "$HERE"; then
 
