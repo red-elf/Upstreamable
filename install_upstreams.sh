@@ -1,5 +1,24 @@
 #!/bin/bash
 
+if [ -z "$SUBMODULES_HOME" ]; then
+
+  echo "ERROR: SUBMODULES_HOME not available"
+  exit 1
+fi
+
+SCRIPT_STRINGS="$SUBMODULES_HOME/Software-Toolkit/Utils/strings.sh"
+
+if test -e "$SCRIPT_STRINGS"; then
+
+  # shellcheck disable=SC1090
+  . "$SCRIPT_STRINGS"
+
+else
+
+  echo "ERROR: Script not found '$SCRIPT_STRINGS'"
+  exit 1
+fi
+
 # TODO:
 #
 # - Upstreams installation to check if already installed, remove all upstream definition duplicates if found
@@ -100,9 +119,7 @@ if test -e "$DIR_UPSTREAMS"; then
 
     ORIGIN=$(git remote show origin)
 
-    # FIXME: Can't match globs
-    #
-    if [ "$ORIGIN" = *"Push  URL: $UPSTREAM"* ]; then
+    if check_contains "$ORIGIN" "Push  URL: $UPSTREAM"; then
 
       echo "WARNING: Upstream remote '$NAME' already added"
 
