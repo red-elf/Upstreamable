@@ -93,49 +93,6 @@ if test -e "$DIR_UPSTREAMS"; then
       fi
     fi
 
-    # TODO:
-    #
-    # more config
-    #   [core]
-    #   repositoryformatversion = 0
-    #   filemode = true
-    #   bare = false
-    #   logallrefupdates = true
-    #   worktree = ../../../../_Submodules/Software-Toolkit
-    # [remote "origin"]
-    #   url = git@github.com:red-elf/Software-Toolkit.git
-    #   fetch = +refs/heads/*:refs/remotes/origin/*
-    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-    # [branch "main"]
-    #   remote = origin
-    #   merge = refs/heads/main
-    # [remote "gitflic"]
-    #   url = git@gitflic.ru:red-elf/software-toolkit.git
-    #   fetch = +refs/heads/*:refs/remotes/gitflic/*
-    # [remote "upstream"]
-    #   url = git@gitflic.ru:red-elf/software-toolkit.git
-    #   fetch = +refs/heads/*:refs/remotes/upstream/*
-    # [remote "github"]
-    #   url = git@github.com:red-elf/Software-Toolkit.git
-    #   fetch = +refs/heads/*:refs/remotes/github/*
-    # [pull]
-    #   rebase = false
-    # 
-    # ^^^ Remove all duplicates, for new installations check of the existing strings existence!   
-
     if cd "$GIT_DIR"; then
 
       GIT_CONFIG="$GIT_DIR/config"
@@ -143,8 +100,55 @@ if test -e "$DIR_UPSTREAMS"; then
       if test -e "$GIT_CONFIG"; then
 
         GIT_CONFIG_CONTENT=$(cat "$GIT_CONFIG")
+        PUSH_URL="pushurl = $UPSTREAM"
 
-        echo "Git config content obtained"
+        if echo "$GIT_CONFIG_CONTENT" | grep "$PUSH_URL"; then
+
+          echo "Push URL is present: $PUSH_URL"
+
+          # TODO:
+          #
+          # more config
+          #   [core]
+          #   repositoryformatversion = 0
+          #   filemode = true
+          #   bare = false
+          #   logallrefupdates = true
+          #   worktree = ../../../../_Submodules/Software-Toolkit
+          # [remote "origin"]
+          #   url = git@github.com:red-elf/Software-Toolkit.git
+          #   fetch = +refs/heads/*:refs/remotes/origin/*
+          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+          # [branch "main"]
+          #   remote = origin
+          #   merge = refs/heads/main
+          # [remote "gitflic"]
+          #   url = git@gitflic.ru:red-elf/software-toolkit.git
+          #   fetch = +refs/heads/*:refs/remotes/gitflic/*
+          # [remote "upstream"]
+          #   url = git@gitflic.ru:red-elf/software-toolkit.git
+          #   fetch = +refs/heads/*:refs/remotes/upstream/*
+          # [remote "github"]
+          #   url = git@github.com:red-elf/Software-Toolkit.git
+          #   fetch = +refs/heads/*:refs/remotes/github/*
+          # [pull]
+          #   rebase = false
+          # 
+          # ^^^ Remove all duplicates, for new installations check of the existing strings existence!   
+        fi
 
       else
 
