@@ -74,12 +74,14 @@ if test -e "$DIR_UPSTREAMS"; then
 
       if echo "$GIT_TYPE" | grep ".git: ASCII text"; then
 
-        PREFIX="gitdir:"
+        PREFIX="gitdir: "
         GIT_CONTENT=$(cat "$GIT_FILE")
 
         if check_contains "$GIT_CONTENT" "$PREFIX"; then
 
             GIT_DIR=$(echo "$GIT_CONTENT" | grep -o -P "(?<=$PREFIX).*(?=)")
+            GIT_DIR="$PARENT/$GIT_DIR"
+            
         fi
         
         echo "Git dir found at: '$GIT_DIR'"
