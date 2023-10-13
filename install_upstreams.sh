@@ -61,8 +61,6 @@ if test -e "$DIR_UPSTREAMS"; then
     echo "Upstream '$NAME': $UPSTREAM"
 
     # TODO:
-    # cat .git
-    #   gitdir: ../../.git/modules/_Submodules/Software-Toolkit
     #
     # cd ../../.git/modules/_Submodules/Software-Toolkit
     #
@@ -122,8 +120,11 @@ if test -e "$DIR_UPSTREAMS"; then
       if echo "$GIT_TYPE" | grep ".git: ASCII text"; then
 
         GIT_CONTENT=$(cat "$GIT_FILE")
-
+        
         # TODO: Obtain the directory path, set and enter.
+        #
+        #   gitdir: ../../.git/modules/_Submodules/Software-Toolkit
+        #
 
       else
 
