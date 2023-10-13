@@ -81,7 +81,7 @@ if test -e "$DIR_UPSTREAMS"; then
 
             GIT_DIR=$(echo "$GIT_CONTENT" | grep -o -P "(?<=$PREFIX).*(?=)")
             GIT_DIR="$PARENT/$GIT_DIR"
-            
+
         fi
         
         echo "Git dir found at: '$GIT_DIR'"
