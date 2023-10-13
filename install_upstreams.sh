@@ -108,11 +108,13 @@ if test -e "$DIR_UPSTREAMS"; then
     # ^^^ Remove all duplicates, for new installations check of the existing strings existence!   
 
     HERE=$(pwd)
+    PARENT=$(dirname "$HERE")
+
     GIT_TYPE=$(file .git)
 
     if echo "$GIT_TYPE" | grep ".git: directory"; then
 
-      GIT_DIR="$HERE/.git"
+      GIT_DIR="$PARENT/.git"
 
     else
 
