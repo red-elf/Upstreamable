@@ -60,6 +60,62 @@ if test -e "$DIR_UPSTREAMS"; then
 
     echo "Upstream '$NAME': $UPSTREAM"
 
+    # TODO:
+    #
+    # - Upstreams installation to check if already installed, remove all upstream definition duplicates if found
+    #
+    # Tech notes:
+    #
+    # file git
+    #   Root:       .git: directory
+    #   Submodule:  .git: ASCII text
+    #
+    # cat .git
+    #   gitdir: ../../.git/modules/_Submodules/Software-Toolkit
+    #
+    # cd ../../.git/modules/_Submodules/Software-Toolkit
+    #
+    # more config
+    #   [core]
+    #   repositoryformatversion = 0
+    #   filemode = true
+    #   bare = false
+    #   logallrefupdates = true
+    #   worktree = ../../../../_Submodules/Software-Toolkit
+    # [remote "origin"]
+    #   url = git@github.com:red-elf/Software-Toolkit.git
+    #   fetch = +refs/heads/*:refs/remotes/origin/*
+    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+    #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
+    #   pushurl = git@github.com:red-elf/Software-Toolkit.git
+    # [branch "main"]
+    #   remote = origin
+    #   merge = refs/heads/main
+    # [remote "gitflic"]
+    #   url = git@gitflic.ru:red-elf/software-toolkit.git
+    #   fetch = +refs/heads/*:refs/remotes/gitflic/*
+    # [remote "upstream"]
+    #   url = git@gitflic.ru:red-elf/software-toolkit.git
+    #   fetch = +refs/heads/*:refs/remotes/upstream/*
+    # [remote "github"]
+    #   url = git@github.com:red-elf/Software-Toolkit.git
+    #   fetch = +refs/heads/*:refs/remotes/github/*
+    # [pull]
+    #   rebase = false
+    # 
+    # ^^^ Remove all duplicates, for new installations check of the existing strings existence!   
+
     ORIGIN=$(git remote show origin)
 
     if check_contains "$ORIGIN" "Push  URL: $UPSTREAM"; then
