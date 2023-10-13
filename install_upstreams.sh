@@ -110,7 +110,7 @@ if test -e "$DIR_UPSTREAMS"; then
     HERE=$(pwd)
     PARENT=$(dirname "$HERE")
 
-    GIT_TYPE=$(file .git)
+    GIT_TYPE=$(file "$PARENT/.git")
 
     if echo "$GIT_TYPE" | grep ".git: directory"; then
 
