@@ -93,8 +93,6 @@ if test -e "$DIR_UPSTREAMS"; then
 
     # TODO:
     #
-    # cd ../../.git/modules/_Submodules/Software-Toolkit
-    #
     # more config
     #   [core]
     #   repositoryformatversion = 0
@@ -135,6 +133,28 @@ if test -e "$DIR_UPSTREAMS"; then
     #   rebase = false
     # 
     # ^^^ Remove all duplicates, for new installations check of the existing strings existence!   
+
+    if cd "$GIT_DIR"; then
+
+      GIT_CONFIG="$GIT_DIR/config"
+
+      if test -e "$GIT_CONFIG"; then
+
+        GIT_CONFIG_CONTENT=$(cat "$GIT_CONFIG")
+
+        echo "Git config content obtained"
+
+      else
+
+        echo "ERROR: Git config not found at '$GIT_CONFIG'"
+        exit 1
+      fi
+
+    else
+
+      echo "ERROR: Could not go to '$GIT_DIR'"
+      exit 1
+    fi
 
     if ! cd "$HERE"; then
 
