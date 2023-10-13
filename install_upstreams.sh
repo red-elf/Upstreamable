@@ -102,7 +102,7 @@ if test -e "$DIR_UPSTREAMS"; then
         GIT_CONFIG_CONTENT=$(cat "$GIT_CONFIG")
         PUSH_URL="pushurl = $UPSTREAM"
 
-        if echo "$GIT_CONFIG_CONTENT" | grep "$PUSH_URL"; then
+        if echo "$GIT_CONFIG_CONTENT" | grep "$PUSH_URL" >/dev/null 2>&1; then
 
           echo "Push URL is present: $PUSH_URL"
 
