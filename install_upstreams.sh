@@ -108,7 +108,7 @@ if test -e "$DIR_UPSTREAMS"; then
 
           echo "Push URL is present: $PUSH_URL"
 
-          # FIXME:
+          # FIXME: Select all between '[remote "origin"]' and '[', then do the filtering, and then merge with the rest of content
           #
           # GIT_CONFIG_TMP="$GIT_CONFIG.tmp"
 
