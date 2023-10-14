@@ -108,69 +108,71 @@ if test -e "$DIR_UPSTREAMS"; then
 
           echo "Push URL is present: $PUSH_URL"
 
-          GIT_CONFIG_TMP="$GIT_CONFIG.tmp"
+          # FIXME:
+          #
+          # GIT_CONFIG_TMP="$GIT_CONFIG.tmp"
 
-          if cp "$GIT_CONFIG" "$GIT_CONFIG_TMP"; then
+          # if cp "$GIT_CONFIG" "$GIT_CONFIG_TMP"; then
 
-            if awk -i inplace '!seen[$0]++' "$GIT_CONFIG_TMP"; then
+          #   if awk -i inplace '!seen[$0]++' "$GIT_CONFIG_TMP"; then
 
-              GIT_CONFIG_TMP_CONTENT=$(cat "$GIT_CONFIG_TMP")
+          #     GIT_CONFIG_TMP_CONTENT=$(cat "$GIT_CONFIG_TMP")
 
-              if [ "$GIT_CONFIG_TMP_CONTENT" = "" ]; then
+          #     if [ "$GIT_CONFIG_TMP_CONTENT" = "" ]; then
 
-                echo "ERROR: Empty tmp file '$GIT_CONFIG_TMP'"
-                exit 1
+          #       echo "ERROR: Empty tmp file '$GIT_CONFIG_TMP'"
+          #       exit 1
 
-              else
+          #     else
 
-                if [ "$GIT_CONFIG_TMP_CONTENT" = "$GIT_CONFIG_CONTENT" ]; then
+          #       if [ "$GIT_CONFIG_TMP_CONTENT" = "$GIT_CONFIG_CONTENT" ]; then
 
-                  echo "No changes in Git config content"
+          #         echo "No changes in Git config content"
 
-                else
+          #       else
 
-                  SUFIX=$(($(date +%s%N)/1000000))
+          #         SUFIX=$(($(date +%s%N)/1000000))
 
-                  if ! cp "$GIT_CONFIG" "$GIT_CONFIG.$SUFIX.bak"; then
+          #         if ! cp "$GIT_CONFIG" "$GIT_CONFIG.$SUFIX.bak"; then
 
-                      echo "ERROR: Could not create a backup of '$GIT_CONFIG'"
-                      exit 1
-                  fi
+          #             echo "ERROR: Could not create a backup of '$GIT_CONFIG'"
+          #             exit 1
+          #         fi
 
-                  if echo "$GIT_CONFIG_TMP_CONTENT" > "$GIT_CONFIG"; then
+          #         if echo "$GIT_CONFIG_TMP_CONTENT" > "$GIT_CONFIG"; then
 
-                    echo "Changes have been applied to Git config '$GIT_CONFIG'"
+          #           echo "Changes have been applied to Git config '$GIT_CONFIG'"
 
-                  else
+          #         else
 
-                    echo "ERROR: Failed to apply changes to Git config '$GIT_CONFIG'"
-                    exit 1
-                  fi
-                fi
+          #           echo "ERROR: Failed to apply changes to Git config '$GIT_CONFIG'"
+          #           exit 1
+          #         fi
+          #       fi
 
-                if rm -f "$GIT_CONFIG_TMP"; then
+          #       if rm -f "$GIT_CONFIG_TMP"; then
 
-                  echo "Tmp file removed: '$GIT_CONFIG_TMP'"
+          #         echo "Tmp file removed: '$GIT_CONFIG_TMP'"
 
-                else
+          #       else
 
-                  echo "ERROR: Tmp file was not removed '$GIT_CONFIG_TMP'"
-                  exit 1
-                fi
+          #         echo "ERROR: Tmp file was not removed '$GIT_CONFIG_TMP'"
+          #         exit 1
+          #       fi
 
-              fi
+          #     fi
 
-            else
+          #   else
 
-              echo "ERROR: Could not filter out the duplicated lines in file '$GIT_CONFIG_TMP'"
-              exit 1
-            fi
+          #     echo "ERROR: Could not filter out the duplicated lines in file '$GIT_CONFIG_TMP'"
+          #     exit 1
+          #   fi
 
-          else
+          # else
 
-            echo "ERROR: Could not create tmp file '$GIT_CONFIG_TMP'"
-            exit 1
-          fi
+          #   echo "ERROR: Could not create tmp file '$GIT_CONFIG_TMP'"
+          #   exit 1
+          # fi
         fi
 
       else
