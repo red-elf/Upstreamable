@@ -93,6 +93,8 @@ if test -e "$DIR_UPSTREAMS"; then
       fi
     fi
 
+    GIT_CONFIG_CONTENT=""
+
     if cd "$GIT_DIR"; then
 
       GIT_CONFIG="$GIT_DIR/config"
@@ -189,9 +191,13 @@ if test -e "$DIR_UPSTREAMS"; then
       exit 1
     fi
 
-    ORIGIN=$(git remote show origin)
+    if [ "$GIT_CONFIG_CONTENT" = "" ]; then
 
-    if check_contains "$ORIGIN" "Push  URL: $UPSTREAM"; then
+      echo "ERROR: No Git config obtained"
+      exit 1
+    fi
+
+    if echo "$GIT_CONFIG_CONTENT" | grep "$PUSH_URL" >/dev/null 2>&1; then
 
       echo "WARNING: Upstream remote '$NAME' already added"
 
