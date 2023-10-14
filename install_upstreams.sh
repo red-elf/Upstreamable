@@ -106,48 +106,69 @@ if test -e "$DIR_UPSTREAMS"; then
 
           echo "Push URL is present: $PUSH_URL"
 
-          # TODO:
-          #
-          # more config
-          #   [core]
-          #   repositoryformatversion = 0
-          #   filemode = true
-          #   bare = false
-          #   logallrefupdates = true
-          #   worktree = ../../../../_Submodules/Software-Toolkit
-          # [remote "origin"]
-          #   url = git@github.com:red-elf/Software-Toolkit.git
-          #   fetch = +refs/heads/*:refs/remotes/origin/*
-          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-          #   pushurl = git@gitflic.ru:red-elf/software-toolkit.git
-          #   pushurl = git@github.com:red-elf/Software-Toolkit.git
-          # [branch "main"]
-          #   remote = origin
-          #   merge = refs/heads/main
-          # [remote "gitflic"]
-          #   url = git@gitflic.ru:red-elf/software-toolkit.git
-          #   fetch = +refs/heads/*:refs/remotes/gitflic/*
-          # [remote "upstream"]
-          #   url = git@gitflic.ru:red-elf/software-toolkit.git
-          #   fetch = +refs/heads/*:refs/remotes/upstream/*
-          # [remote "github"]
-          #   url = git@github.com:red-elf/Software-Toolkit.git
-          #   fetch = +refs/heads/*:refs/remotes/github/*
-          # [pull]
-          #   rebase = false
-          # 
-          # ^^^ Remove all duplicates, for new installations check of the existing strings existence!   
+          GIT_CONFIG_TMP="$GIT_CONFIG.tmp"
+
+          if cp "$GIT_CONFIG" "$GIT_CONFIG_TMP"; then
+
+            if awk -i inplace '!seen[$0]++' "$GIT_CONFIG_TMP"; then
+
+              GIT_CONFIG_TMP_CONTENT=$(cat "$GIT_CONFIG_TMP")
+
+              if [ "$GIT_CONFIG_TMP_CONTENT" = "" ]; then
+
+                echo "ERROR: Empty tmp file '$GIT_CONFIG_TMP'"
+                exit 1
+
+              else
+
+                if [ "$GIT_CONFIG_TMP_CONTENT" = "$GIT_CONFIG_CONTENT" ]; then
+
+                  echo "No changes in Git config content"
+
+                else
+
+                  SUFIX=$(($(date +%s%N)/1000000))
+
+                  if ! cp "$GIT_CONFIG" "$GIT_CONFIG.$SUFIX.bak"; then
+
+                      echo "ERROR: Could not create a backup of '$GIT_CONFIG'"
+                      exit 1
+                  fi
+
+                  if echo "$GIT_CONFIG_TMP_CONTENT" > "$GIT_CONFIG"; then
+
+                    echo "Changes have been applied to Git config '$GIT_CONFIG'"
+
+                  else
+
+                    echo "ERROR: Failed to apply changes to Git config '$GIT_CONFIG'"
+                    exit 1
+                  fi
+                fi
+
+                if rm -f "$GIT_CONFIG_TMP"; then
+
+                  echo "Tmp file removed: '$GIT_CONFIG_TMP'"
+
+                else
+
+                  echo "ERROR: Tmp file was not removed '$GIT_CONFIG_TMP'"
+                  exit 1
+                fi
+
+              fi
+
+            else
+
+              echo "ERROR: Could not filter out the duplicated lines in file '$GIT_CONFIG_TMP'"
+              exit 1
+            fi
+
+          else
+
+            echo "ERROR: Could not create tmp file '$GIT_CONFIG_TMP'"
+            exit 1
+          fi
         fi
 
       else
