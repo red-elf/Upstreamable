@@ -108,71 +108,80 @@ if test -e "$DIR_UPSTREAMS"; then
 
           echo "Push URL is present: $PUSH_URL"
 
-          # FIXME: Select all between '[remote "origin"]' and '[', then do the filtering, and then merge with the rest of content
-          #
-          # GIT_CONFIG_TMP="$GIT_CONFIG.tmp"
+          TRIM_LINES() {
 
-          # if cp "$GIT_CONFIG" "$GIT_CONFIG_TMP"; then
+            if [ -z "$1" ]; then
 
-          #   if awk -i inplace '!seen[$0]++' "$GIT_CONFIG_TMP"; then
+              echo "ERROR: File parameter is mandatoy"
+              exit 1
+            fi
 
-          #     GIT_CONFIG_TMP_CONTENT=$(cat "$GIT_CONFIG_TMP")
+            FILE_TO_TRIM="$1"
 
-          #     if [ "$GIT_CONFIG_TMP_CONTENT" = "" ]; then
+            echo "Trimming: $FILE_TO_TRIM"
 
-          #       echo "ERROR: Empty tmp file '$GIT_CONFIG_TMP'"
-          #       exit 1
+            FILE_TMP="$FILE_TO_TRIM.tmp"
 
-          #     else
+            if cp "$FILE_TO_TRIM" "$FILE_TMP"; then
 
-          #       if [ "$GIT_CONFIG_TMP_CONTENT" = "$GIT_CONFIG_CONTENT" ]; then
+                echo "Working file created: $FILE_TMP"
 
-          #         echo "No changes in Git config content"
+            else
 
-          #       else
+              echo "ERROR: Could not create tmp file '$GIT_CONFIG_TMP'"
+              exit 1
+            fi
 
-          #         SUFIX=$(($(date +%s%N)/1000000))
+            # TODO: Implement and move to string utils
+            #
+            #     GIT_CONFIG_TMP_CONTENT=$(cat "$GIT_CONFIG_TMP")
+      
+            #     if [ "$GIT_CONFIG_TMP_CONTENT" = "" ]; then
 
-          #         if ! cp "$GIT_CONFIG" "$GIT_CONFIG.$SUFIX.bak"; then
+            #       echo "ERROR: Empty tmp file '$GIT_CONFIG_TMP'"
+            #       exit 1
 
-          #             echo "ERROR: Could not create a backup of '$GIT_CONFIG'"
-          #             exit 1
-          #         fi
+            #     else
 
-          #         if echo "$GIT_CONFIG_TMP_CONTENT" > "$GIT_CONFIG"; then
+            #       if [ "$GIT_CONFIG_TMP_CONTENT" = "$GIT_CONFIG_CONTENT" ]; then
 
-          #           echo "Changes have been applied to Git config '$GIT_CONFIG'"
+            #         echo "No changes in Git config content"
 
-          #         else
+            #       else
 
-          #           echo "ERROR: Failed to apply changes to Git config '$GIT_CONFIG'"
-          #           exit 1
-          #         fi
-          #       fi
+            #         SUFIX=$(($(date +%s%N)/1000000))
 
-          #       if rm -f "$GIT_CONFIG_TMP"; then
+            #         if ! cp "$GIT_CONFIG" "$GIT_CONFIG.$SUFIX.bak"; then
 
-          #         echo "Tmp file removed: '$GIT_CONFIG_TMP'"
+            #             echo "ERROR: Could not create a backup of '$GIT_CONFIG'"
+            #             exit 1
+            #         fi
 
-          #       else
+            #         if echo "$GIT_CONFIG_TMP_CONTENT" > "$GIT_CONFIG"; then
 
-          #         echo "ERROR: Tmp file was not removed '$GIT_CONFIG_TMP'"
-          #         exit 1
-          #       fi
+            #           echo "Changes have been applied to Git config '$GIT_CONFIG'"
 
-          #     fi
+            #         else
 
-          #   else
+            #           echo "ERROR: Failed to apply changes to Git config '$GIT_CONFIG'"
+            #           exit 1
+            #         fi
+            #       fi
 
-          #     echo "ERROR: Could not filter out the duplicated lines in file '$GIT_CONFIG_TMP'"
-          #     exit 1
-          #   fi
+            #       if rm -f "$GIT_CONFIG_TMP"; then
 
-          # else
+            #         echo "Tmp file removed: '$GIT_CONFIG_TMP'"
 
-          #   echo "ERROR: Could not create tmp file '$GIT_CONFIG_TMP'"
-          #   exit 1
-          # fi
+            #       else
+
+            #         echo "ERROR: Tmp file was not removed '$GIT_CONFIG_TMP'"
+            #         exit 1
+            #       fi
+
+            #     fi
+          }
+
+          TRIM_LINES "$GIT_CONFIG_TMP"
         fi
 
       else
