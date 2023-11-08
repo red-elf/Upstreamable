@@ -143,6 +143,11 @@ if test -e "$DIR_UPSTREAMS"; then
       git remote add "$NAME" "$UPSTREAM" && \
         echo "Upstream remote '$NAME' added"
 
+      if git remote set-url --delete --push origin "$UPSTREAM"; then
+
+        echo "Upstream push '$NAME' cleared"
+      fi
+
       if git remote set-url --add --push origin "$UPSTREAM"; then
 
         echo "Upstream push '$NAME' added"
