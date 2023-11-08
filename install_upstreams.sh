@@ -93,93 +93,17 @@ if test -e "$DIR_UPSTREAMS"; then
       fi
     fi
 
-    GIT_CONFIG_CONTENT=""
-
     if cd "$GIT_DIR"; then
 
       GIT_CONFIG="$GIT_DIR/config"
 
       if test -e "$GIT_CONFIG"; then
 
-        GIT_CONFIG_CONTENT=$(cat "$GIT_CONFIG")
         PUSH_URL="pushurl = $UPSTREAM"
 
         if echo "$GIT_CONFIG_CONTENT" | grep "$PUSH_URL" >/dev/null 2>&1; then
 
           echo "Push URL is present: $PUSH_URL"
-
-          TRIM_LINES() {
-
-            if [ -z "$1" ]; then
-
-              echo "ERROR: File parameter is mandatoy"
-              exit 1
-            fi
-
-            FILE_TO_TRIM="$1"
-
-            echo "Trimming: $FILE_TO_TRIM"
-
-            FILE_TMP="$FILE_TO_TRIM.tmp"
-
-            if cp "$FILE_TO_TRIM" "$FILE_TMP"; then
-
-                echo "Working file created: $FILE_TMP"
-
-            else
-
-              echo "ERROR: Could not create tmp file '$GIT_CONFIG_TMP'"
-              exit 1
-            fi
-
-            # TODO: Implement and move to string utils
-            #
-            #     GIT_CONFIG_TMP_CONTENT=$(cat "$GIT_CONFIG_TMP")
-
-            #     if [ "$GIT_CONFIG_TMP_CONTENT" = "" ]; then
-
-            #       echo "ERROR: Empty tmp file '$GIT_CONFIG_TMP'"
-            #       exit 1
-
-            #     else
-
-            #       if [ "$GIT_CONFIG_TMP_CONTENT" = "$GIT_CONFIG_CONTENT" ]; then
-
-            #         echo "No changes in Git config content"
-
-            #       else
-
-            #         SUFIX=$(($(date +%s%N)/1000000))
-
-            #         if ! cp "$GIT_CONFIG" "$GIT_CONFIG.$SUFIX.bak"; then
-
-            #             echo "ERROR: Could not create a backup of '$GIT_CONFIG'"
-            #             exit 1
-            #         fi
-
-            #         if echo "$GIT_CONFIG_TMP_CONTENT" > "$GIT_CONFIG"; then
-
-            #           echo "Changes have been applied to Git config '$GIT_CONFIG'"
-
-            #         else
-
-            #           echo "ERROR: Failed to apply changes to Git config '$GIT_CONFIG'"
-            #           exit 1
-            #         fi
-            #       fi
-
-            #       if rm -f "$GIT_CONFIG_TMP"; then
-
-            #         echo "Tmp file removed: '$GIT_CONFIG_TMP'"
-
-            #       else
-
-            #         echo "ERROR: Tmp file was not removed '$GIT_CONFIG_TMP'"
-            #         exit 1
-            #       fi
-
-            #     fi
-          }
 
           TRIM_LINES "$GIT_CONFIG"
         fi
@@ -201,6 +125,8 @@ if test -e "$DIR_UPSTREAMS"; then
       echo "ERROR: Could not go back into '$HERE'"
       exit 1
     fi
+
+    GIT_CONFIG_CONTENT=$(cat "$GIT_CONFIG")
 
     if [ "$GIT_CONFIG_CONTENT" = "" ]; then
 
