@@ -135,7 +135,7 @@ if test -e "$DIR_UPSTREAMS"; then
             # TODO: Implement and move to string utils
             #
             #     GIT_CONFIG_TMP_CONTENT=$(cat "$GIT_CONFIG_TMP")
-      
+
             #     if [ "$GIT_CONFIG_TMP_CONTENT" = "" ]; then
 
             #       echo "ERROR: Empty tmp file '$GIT_CONFIG_TMP'"
@@ -181,7 +181,7 @@ if test -e "$DIR_UPSTREAMS"; then
             #     fi
           }
 
-          TRIM_LINES "$GIT_CONFIG_TMP"
+          TRIM_LINES "$GIT_CONFIG"
         fi
 
       else
