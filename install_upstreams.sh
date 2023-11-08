@@ -104,8 +104,6 @@ if test -e "$DIR_UPSTREAMS"; then
         if echo "$GIT_CONFIG_CONTENT" | grep "$PUSH_URL" >/dev/null 2>&1; then
 
           echo "Push URL is present: $PUSH_URL"
-
-          TRIM_LINES "$GIT_CONFIG"
         fi
 
       else
