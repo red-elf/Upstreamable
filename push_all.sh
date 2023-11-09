@@ -45,8 +45,8 @@ else
   exit 1
 fi
 
+DIR_UPSTREAMS=""
 UPSTREAMS="Upstreams"
-DIR_UPSTREAMS="$UPSTREAMS"
 
 if [ -n "$1" ]; then
 
