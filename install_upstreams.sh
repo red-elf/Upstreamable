@@ -77,7 +77,7 @@ if test -e "$DIR_UPSTREAMS"; then
         PREFIX="gitdir: "
         GIT_CONTENT=$(cat "$GIT_FILE")
 
-        if check_contains "$GIT_CONTENT" "$PREFIX"; then
+        if CHECK_CONTAINS "$GIT_CONTENT" "$PREFIX"; then
 
             GIT_DIR=$(echo "$GIT_CONTENT" | grep -o -P "(?<=$PREFIX).*(?=)")
             GIT_DIR="$PARENT/$GIT_DIR"
