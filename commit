@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ -z "$SUBMODULES_HOME" ]; then
+
+  echo "ERROR: SUBMODULES_HOME not available"
+  exit 1
+fi
+
+SCRIPT_COMMIT="$SUBMODULES_HOME/Upstreamable/commit.sh"
+
+if ! test -e "$SCRIPT_COMMIT"; then
+
+  echo "ERROR: Script not found '$SCRIPT_COMMIT'"
+  exit 1
+fi
+
+if [ -n "$1" ]; then
+
+  sh "$SCRIPT_COMMIT" "$1"
+
+else
+  
+  sh "$SCRIPT_COMMIT"
+fi
