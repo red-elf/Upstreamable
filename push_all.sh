@@ -69,7 +69,7 @@ SCRIPT_PUSH_ALL="$SUBMODULES_HOME/Software-Toolkit/Utils/Git/push_all.sh"
 
 if test -e "$SCRIPT_PUSH_ALL"; then
 
-  if sh "$SCRIPT_PUSH_ALL" "$DIR_UPSTREAMS"; then
+  if bash "$SCRIPT_PUSH_ALL" "$DIR_UPSTREAMS"; then
 
     echo "Push all finished"
 
@@ -89,5 +89,5 @@ if test -e "$HOOK_SCRIPT"; then
 
   echo "Executing the hook script: $HOOK_SCRIPT"
 
-  sh "$HOOK_SCRIPT" "$(pwd)/$DIR_UPSTREAMS"
+  bash "$HOOK_SCRIPT" "$(pwd)/$DIR_UPSTREAMS"
 fi

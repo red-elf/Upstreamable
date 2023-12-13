@@ -16,9 +16,9 @@ fi
 
 if [ -n "$1" ]; then
 
-  sh "$SCRIPT_COMMIT" "$1"
+  bash "$SCRIPT_COMMIT" "$1"
 
 else
   
-  sh "$SCRIPT_COMMIT"
+  bash "$SCRIPT_COMMIT"
 fi

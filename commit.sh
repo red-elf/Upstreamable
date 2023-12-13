@@ -43,7 +43,7 @@ if test -e "$SCRIPT_COMMIT"; then
       MESSAGE="$1"
   fi
 
-  if ! sh "$SCRIPT_COMMIT" "$MESSAGE"; then
+  if ! bash "$SCRIPT_COMMIT" "$MESSAGE"; then
 
     echo "ERROR: Commit failure"
     exit 1
