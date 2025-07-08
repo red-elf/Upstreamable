@@ -96,7 +96,6 @@ if test -e "$DIR_UPSTREAMS"; then
             fi
 
             GIT_DIR="$PARENT/$GIT_DIR"
-
         fi
         
         echo "Git dir found at: '$GIT_DIR'"
