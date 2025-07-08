@@ -79,7 +79,22 @@ if test -e "$DIR_UPSTREAMS"; then
 
         if CHECK_CONTAINS "$GIT_CONTENT" "$PREFIX"; then
 
-            GIT_DIR=$(echo "$GIT_CONTENT" | grep -o -P "(?<=$PREFIX).*(?=)")
+            if [ "$(uname)" = "Darwin" ]; then
+
+              if command -v ggrep >/dev/null; then
+            
+                  GIT_DIR=$(echo "$GIT_CONTENT" | ggrep -o -P "(?<=$PREFIX).*")
+
+              else
+                  
+                  GIT_DIR=$(echo "$GIT_CONTENT" | sed -n "s/.*$PREFIX\(.*\)/\1/p")
+              fi
+
+            else
+              
+              GIT_DIR=$(echo "$GIT_CONTENT" | grep -o -P "(?<=$PREFIX).*(?=)")
+            fi
+
             GIT_DIR="$PARENT/$GIT_DIR"
 
         fi
