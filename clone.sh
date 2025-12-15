@@ -14,4 +14,4 @@ fi
 
 WHAT="$1"
 
-git clone --recurse-submodules --remote-submodules "$1"
+git clone --recurse-submodules --remote-submodules "$1" .
