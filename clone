@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ -z "$SUBMODULES_HOME" ]; then
+
+  echo "ERROR: SUBMODULES_HOME not available"
+  exit 1
+fi
+
+SCRIPT_CLONE="$SUBMODULES_HOME/Upstreamable/clone.sh"
+
+if ! test -e "$SCRIPT_CLONE"; then
+
+  echo "ERROR: Script not found '$SCRIPT_CLONE'"
+  exit 1
+fi
+
+if [ -n "$1" ]; then
+
+  bash "$SCRIPT_CLONE" "$1"
+
+else
+  
+  bash "$SCRIPT_CLONE"
+fi
