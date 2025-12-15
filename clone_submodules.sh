@@ -1,11 +1,5 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
-  
-  echo "ERROR: Please provide the repository you want to clone"
-  exit 1
-fi
-
 if [ -z "$SUBMODULES_HOME" ]; then
   
   echo "ERROR: SUBMODULES_HOME not available"
@@ -22,14 +16,7 @@ fi
 
 . "$SUBMODULES_INCLUDES"
 
-WHAT="$1"
-
-# Clone main repository with all submodules into current directory
-echo "Cloning repository into current directory..."
-git clone --recurse-submodules "$1" .
-
 # Store the current directory as project root
 PROJECT_ROOT=$(pwd)
 
 process_submodules
-
