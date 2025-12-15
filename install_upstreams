@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ -z "$SUBMODULES_HOME" ]; then
+
+  echo "ERROR: SUBMODULES_HOME not available"
+  exit 1
+fi
+
+SCRIPT="$SUBMODULES_HOME/Upstreamable/install_upstreams.sh"
+
+if ! test -e "$SCRIPT"; then
+
+  echo "ERROR: Script not found '$SCRIPT'"
+  exit 1
+fi
+
+bash "$SCRIPT"
