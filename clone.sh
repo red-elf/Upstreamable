@@ -37,5 +37,5 @@ INSTALL_UPSTREAMS_SCRIPT="$SUBMODULES_HOME/Upstreamable/install_upstreams.sh"
 
 if test -e "$PROJECT_ROOT/Upstreams" && test -e "$INSTALL_UPSTREAMS_SCRIPT"; then
 
-  bash "$INSTALL_UPSTREAMS_SCRIPT" && echo "Upstreams have been isntalled with success"
+  bash "$INSTALL_UPSTREAMS_SCRIPT" && echo "Upstreams have been installed with success"
 fi
