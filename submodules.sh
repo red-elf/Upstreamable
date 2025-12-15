@@ -22,18 +22,26 @@ process_submodule() {
                        git -C "$PROJECT_ROOT" config --file "$PROJECT_ROOT/.gitmodules" submodule.$sm_name.branch 2>/dev/null)
     
     if [ -n "$configured_branch" ]; then
+        
         echo "  Branch configured in .gitmodules: $configured_branch"
         
         # Check if branch exists locally
         if git show-ref --verify --quiet "refs/heads/$configured_branch"; then
+        
             echo "  Branch exists locally, checking out"
             git checkout "$configured_branch"
+
         else
+
             echo "  Branch doesn't exist locally, checking out from origin"
+
             # Try to checkout from remote
             if git ls-remote --exit-code origin "$configured_branch" >/dev/null 2>&1; then
+
                 git checkout -b "$configured_branch" "origin/$configured_branch"
+
             else
+                
                 echo "  WARNING: Branch '$configured_branch' doesn't exist on remote"
                 # Fall back to default branch
                 local default_branch
@@ -45,8 +53,9 @@ process_submodule() {
         
         # Pull latest from the configured branch
         git pull origin "$configured_branch" 2>/dev/null || echo "  Could not pull from $configured_branch"
-        
+
     else
+        
         echo "  No branch configured in .gitmodules"
         
         # Try to get default branch
@@ -54,6 +63,7 @@ process_submodule() {
         default_branch=$(git remote show origin 2>/dev/null | grep "HEAD branch" | cut -d" " -f5)
         
         if [ -z "$default_branch" ]; then
+            
             # Try common branch names
             if git show-ref --verify --quiet refs/heads/main; then
                 default_branch="main"
@@ -69,9 +79,12 @@ process_submodule() {
         git checkout "$default_branch" 2>/dev/null || git checkout master 2>/dev/null || true
         git pull origin "$default_branch" 2>/dev/null || echo "  Could not pull from $default_branch"
     fi
+
+    which install_upstreams && install_upstreams && echo "Upstreams installed in: $(pwd)"
     
     # Recursively process nested submodules
     if [ -f .gitmodules ]; then
+        
         echo "  Processing nested submodules..."
         git submodule update --init --recursive
         
@@ -80,7 +93,9 @@ process_submodule() {
         
         # Process nested submodules
         git submodule foreach --recursive '
+            
             echo "    Nested: $name"
+            
             cd "$toplevel/$path"
             
             # For nested submodules, look for .gitmodules in the immediate parent
@@ -93,13 +108,18 @@ process_submodule() {
                                git config --file "$parent_gitmodules" submodule.$name.branch 2>/dev/null)
             
             if [ -n "$configured_branch" ]; then
+            
                 git checkout "$configured_branch" 2>/dev/null || git checkout -b "$configured_branch" "origin/$configured_branch" 2>/dev/null
                 git pull origin "$configured_branch" 2>/dev/null || true
+
             else
+                
                 default_branch=$(git remote show origin 2>/dev/null | grep "HEAD branch" | cut -d" " -f5 2>/dev/null || echo "main")
                 git checkout "$default_branch" 2>/dev/null || git checkout master 2>/dev/null
                 git pull origin "$default_branch" 2>/dev/null || true
             fi
+
+            which install_upstreams && install_upstreams && echo "Upstreams installed in: $(pwd)"
         '
     fi
     
