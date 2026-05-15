@@ -35,7 +35,9 @@ process_submodules
 
 INSTALL_UPSTREAMS_SCRIPT="$SUBMODULES_HOME/Upstreamable/install_upstreams.sh"
 
-if test -e "$PROJECT_ROOT/Upstreams" && test -e "$INSTALL_UPSTREAMS_SCRIPT"; then
+# Helix Constitution §11.4.29: 'upstreams/' (preferred) OR legacy 'Upstreams/'
+# satisfies the post-clone install_upstreams trigger (§11.4.36).
+if { test -e "$PROJECT_ROOT/upstreams" || test -e "$PROJECT_ROOT/Upstreams"; } && test -e "$INSTALL_UPSTREAMS_SCRIPT"; then
 
   bash "$INSTALL_UPSTREAMS_SCRIPT" && echo "Upstreams have been installed with success"
 fi

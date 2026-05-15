@@ -19,7 +19,14 @@ else
   exit 1
 fi
 
-DIR_UPSTREAMS="Upstreams"
+# Helix Constitution §11.4.29: prefer lowercase 'upstreams/' over legacy
+# 'Upstreams/'. Both are valid recipe containers; lowercase wins when both
+# exist. Caller may override with $1.
+if test -e "upstreams"; then
+  DIR_UPSTREAMS="upstreams"
+else
+  DIR_UPSTREAMS="Upstreams"
+fi
 
 if [ -n "$1" ]; then
 

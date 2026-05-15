@@ -46,15 +46,25 @@ else
 fi
 
 DIR_UPSTREAMS=""
-UPSTREAMS="Upstreams"
+# Helix Constitution §11.4.29: prefer lowercase 'upstreams/', fall back to
+# legacy 'Upstreams/'. Both are recognized as recipe-container directories.
+UPSTREAMS_LC="upstreams"
+UPSTREAMS_UC="Upstreams"
+UPSTREAMS="$UPSTREAMS_UC"
 
 if [ -n "$1" ]; then
 
   DIR_UPSTREAMS="$1"
 
-  if ! echo "$DIR_UPSTREAMS" | grep "$UPSTREAMS"; then
+  # If caller passed a path that doesn't yet end in either form, append the
+  # one that exists at $1 (lowercase preferred); otherwise leave as-is.
+  if ! echo "$DIR_UPSTREAMS" | grep -E "(^|/)($UPSTREAMS_LC|$UPSTREAMS_UC)(/|\$)" >/dev/null; then
 
-      DIR_UPSTREAMS="$DIR_UPSTREAMS/$UPSTREAMS"
+      if test -e "$DIR_UPSTREAMS/$UPSTREAMS_LC"; then
+          DIR_UPSTREAMS="$DIR_UPSTREAMS/$UPSTREAMS_LC"
+      else
+          DIR_UPSTREAMS="$DIR_UPSTREAMS/$UPSTREAMS_UC"
+      fi
   fi
 fi
 
